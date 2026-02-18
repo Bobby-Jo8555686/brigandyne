@@ -1,0 +1,766 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <h1 class="main-title">Brigandyne</h1>
+
+    <header class="sheet-header flexrow" style="align-items: flex-start; gap: 20px;">
+        <img src="{{actor.img}}" data-edit="img" title="{{actor.name}}" style="flex: 0 0 160px; height: 250px; object-fit: cover; border: 2px solid #111; border-radius: 5px;"/>
+        
+        <div class="header-bio flexcolumn" style="flex: 1; gap: 8px;">
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold;">Nom, surnom</label>
+                <input name="name" type="text" value="{{actor.name}}" style="flex: 1;"/>
+            </div>
+            
+            {{#if (eq actor.type "personnage")}}
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold;">Peuple, sang</label>
+                <input type="text" value="{{#each origines}}{{name}}{{/each}}" readonly title="Géré via l'onglet Biographie" style="flex: 1; background: rgba(0,0,0,0.05); border: 1px solid #ccc;"/>
+            </div>
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold;">Archétype</label>
+                <input type="text" value="{{#each archetypes}}{{name}}{{/each}}" readonly title="Géré via l'onglet Biographie" style="flex: 1; background: rgba(0,0,0,0.05); border: 1px solid #ccc;"/>
+            </div>
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold;">Carrière(s)</label>
+                <input type="text" value="{{#each carrieres}}{{name}} {{/each}}" readonly title="Géré via l'onglet Biographie" style="flex: 1; background: rgba(0,0,0,0.05); border: 1px solid #ccc;"/>
+            </div>
+            
+            {{else}}
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold; color: #5b1a1a;">Type de PNJ</label>
+                <select name="system.type_pnj" style="flex: 1; font-family: 'Palatino Linotype', serif;">
+                    {{selectOptions pnjTypes selected=system.type_pnj}}
+                </select>
+            </div>
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold;">Origine (Info)</label>
+                <input type="text" name="system.origine" value="{{system.origine}}" placeholder="Ex: Cité libre..." style="flex: 1;"/>
+            </div>
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold;">Archétype (Info)</label>
+                <input type="text" name="system.archetype" value="{{system.archetype}}" placeholder="Ex: Combattant..." style="flex: 1;"/>
+            </div>
+            <div class="bio-line flexrow" style="align-items: center;">
+                <label style="flex: 0 0 120px; font-weight: bold;">Carrière (Info)</label>
+                <input type="text" name="system.carriere" value="{{system.carriere}}" placeholder="Ex: Mercenaire..." style="flex: 1;"/>
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="header-stats flexcolumn" style="flex: 0 0 140px; align-items: center; gap: 15px;">
+            
+            <div class="initiative-box flexcolumn" style="width: 100%; align-items: center;">
+                <i class="fas fa-flag" style="font-size: 1.5em; margin-bottom: 5px;"></i>
+                <label style="font-weight: bold; font-variant: small-caps;">Initiative</label>
+                <span style="font-size: 1.5em; font-weight: bold;">{{system.initiative.value}}</span>
+            </div>
+            
+            <div class="initiative-box flexcolumn" style="width: 100%; align-items: center; background: rgba(0,0,0,0.5); border-color: #444;">
+                <i class="fas fa-shield-alt" style="font-size: 1.5em; margin-bottom: 5px; color: #aaa;"></i>
+                <label style="font-weight: bold; font-variant: small-caps;">Protection</label>
+                <span style="font-size: 1.5em; font-weight: bold; color: #e0e0e0;">{{system.protection.value}}</span>
+            </div>
+
+            <div class="options-box" style="text-align: center; font-size: 0.85em;">
+                <label style="cursor: pointer; line-height: 1;">
+                    <input type="checkbox" name="system.options.malus_armure" {{checked system.options.malus_armure}}/>
+                    Appliquer malus d'armures
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <hr style="border: 1px solid #111; margin: 15px 0;">
+
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="stats">Caractéristiques</a>
+        <a class="item" data-tab="inventory">Inventaire</a>
+        {{#if showMagicTab}}
+        <a class="item" data-tab="spells">Magie</a>
+        {{/if}}
+        <a class="item" data-tab="biography">Biographie</a>
+    </nav>
+
+    <section class="sheet-body">
+        
+        <div class="tab stats" data-group="primary" data-tab="stats" style="padding-top: 10px;">
+            <div class="flexrow" style="gap: 20px; align-items: flex-start;">
+                
+                <div class="competences-col flexcolumn" style="flex: 0 0 45%; max-width: 45%; background: rgba(0,0,0,0.2); padding: 10px; border: 1px solid #333; border-radius: 4px;">
+                    
+                    <div class="comp-header flexrow" style="border-bottom: 2px solid #555; margin-bottom: 10px; padding-bottom: 5px; font-weight: bold; font-family: 'Georgia', serif; font-size: 0.8em; text-transform: uppercase; color: #aaa;">
+                        <div style="flex: 2;">Compétences</div>
+                        <div style="flex: 0 0 35px; text-align: center;" title="Base">Bs.</div>
+                        <div style="flex: 0 0 80px; text-align: center;" title="Progression">Prog.</div>
+                        <div style="flex: 0 0 45px; text-align: center;" title="Actuel">Act.</div>
+                    </div>
+                    
+                    <div class="stats-list" style="display: flex; flex-direction: column; gap: 4px;">
+                        {{#each system.stats as |stat key|}}
+                        <div class="stat-row flexrow" style="align-items: center; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 3px;">
+                            
+                            <label class="stat-label rollable" data-key="{{key}}" style="flex: 2; cursor: pointer; font-size: 1.05em; color: #ccc;">
+                                {{stat.label}}
+                            </label>
+                            
+                            <div style="flex: 0 0 35px; text-align: center;">
+                                <input type="number" class="base-input" name="system.stats.{{key}}.value" value="{{stat.value}}" title="Score de base" style="width: 100%; height: 22px; font-size: 1em;" />
+                            </div>
+                            
+                            <div style="flex: 0 0 80px; text-align: center; display: flex; justify-content: center; gap: 2px; align-items: center;">
+                                {{#each stat.progressBoxes}}
+                                    <a class="prog-box {{#if this.locked}}locked{{else if this.checked}}checked{{else}}empty{{/if}}" 
+                                       data-stat="{{this.statKey}}" 
+                                       data-value="{{this.value}}" 
+                                       title="{{#if this.locked}}Bloqué par la carrière{{else}}Niveau {{this.value}}{{/if}}"
+                                       style="width: 10px; height: 10px;">
+                                    </a>
+                                {{/each}}
+                            </div>
+                            
+                            <div style="flex: 0 0 45px; text-align: center; display: flex; justify-content: flex-end; gap: 3px; align-items: center;">
+                                <div class="actual-box" style="width: 26px; height: 22px; line-height: 22px; font-size: 1em; color: {{#if stat.isModified}}#e74c3c{{else}}#fff{{/if}} !important;" title="Score final validé">
+                                    {{stat.total}}
+                                </div>
+                                <span style="font-size: 0.8em; color: #555; width: 12px;">{{brigandyne-dizaine stat.total}}</span>
+                            </div>
+
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div class="handicaps-box" style="margin-top: 15px; border-top: 2px solid #8b0000; padding-top: 10px;">
+                        <h3 style="margin: 0 0 10px 0; font-family: 'Georgia', serif; font-size: 1em; color: #ffcccc; text-transform: uppercase;">
+                            <i class="fas fa-skull-crossbones" style="color: #8b0000;"></i> États & Handicaps
+                        </h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 0.85em; color: #ccc;">
+                            
+                            <label title="1 Désavantage à toutes les actions." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.affaibli" {{checked system.handicaps.affaibli}} style="width: 12px; height: 12px; margin: 0;"/> Affaibli
+                            </label>
+                            <label title="Pas de R+, Dégâts -1" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.affame" {{checked system.handicaps.affame}} style="width: 12px; height: 12px; margin: 0;"/> Affamé/Assoiffé
+                            </label>
+                            <label title="Test de VOL pour agir, sinon fuit ou passe le tour." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.apeure" {{checked system.handicaps.apeure}} style="width: 12px; height: 12px; margin: 0;"/> Apeuré
+                            </label>
+                            <label title="2 Désav. à la vue. Compétences visuelles (TIR, lecture) tombent à 0." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.aveugle" {{checked system.handicaps.aveugle}} style="width: 12px; height: 12px; margin: 0;"/> Aveuglé
+                            </label>
+                            <label title="Test de PER pour agir." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.confus" {{checked system.handicaps.confus}} style="width: 12px; height: 12px; margin: 0;"/> Confus
+                            </label>
+                            <label title="Pas de R+, Dégâts -1" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.demoralise" {{checked system.handicaps.demoralise}} style="width: 12px; height: 12px; margin: 0;"/> Démoralisé/Intimidé
+                            </label>
+                            <label title="Perd 1 PV au début de son tour." style="cursor: pointer; display: flex; align-items: center; gap: 5px; color: #ff5252;">
+                                <input type="checkbox" name="system.handicaps.ensanglante" {{checked system.handicaps.ensanglante}} style="width: 12px; height: 12px; margin: 0;"/> Ensanglanté
+                            </label>
+                            <label title="Test d'END pour agir." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.essouffle" {{checked system.handicaps.essouffle}} style="width: 12px; height: 12px; margin: 0;"/> Essoufflé
+                            </label>
+                            <label title="Immobilisé, mais conscient." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.paralyse" {{checked system.handicaps.paralyse}} style="width: 12px; height: 12px; margin: 0;"/> Paralysé
+                            </label>
+                            <label title="Test de MOU pour agir." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.ralenti" {{checked system.handicaps.ralenti}} style="width: 12px; height: 12px; margin: 0;"/> Ralenti
+                            </label>
+                            <label title="Test de FOR pour agir." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.sonne" {{checked system.handicaps.sonne}} style="width: 12px; height: 12px; margin: 0;"/> Sonné
+                            </label>
+                            <label title="Doit fuir ou passer son tour." style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="system.handicaps.terrorise" {{checked system.handicaps.terrorise}} style="width: 12px; height: 12px; margin: 0;"/> Terrorisé
+                            </label>
+                        </div>
+                        
+                        <div style="margin-top: 10px; text-align: center;">
+                            <a class="ignore-handicap-btn" title="Dépenser 2 points de Sang-froid pour ignorer un handicap ce tour" style="display: inline-block; background: #8b0000; color: #fff; padding: 3px 8px; border-radius: 3px; font-size: 0.8em; font-weight: bold; cursor: pointer; border: 1px solid #ff5252;">
+                                <i class="fas fa-fire-alt"></i> Ignorer (2 SF)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="combat-atouts-col flexcolumn" style="flex: 1; gap: 15px;">
+                    
+                    <div class="item-section" style="background: rgba(0,0,0,0.2); padding: 10px; border: 1px solid #333; border-radius: 4px;">
+                        <div class="item-header flexrow" style="border-bottom: 2px solid #8b0000; margin-bottom: 10px;">
+                            <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; color: #e0e0e0;"><i class="fas fa-khanda" style="color: #8b0000; font-size: 0.9em; margin-right: 5px;"></i> Armes</h3>
+                            <div class="item-controls" style="text-align: right;">
+                                <a class="item-control item-create" data-type="arme" title="Créer une Arme" style="font-size: 0.8em; color: #aaa;"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                        <ul class="item-list">
+                            {{#each armes as |arme id|}}
+                            <li class="item flexcolumn" data-item-id="{{arme._id}}" style="padding: 4px 0; border-bottom: 1px dashed #555;">
+                                <div class="flexrow" style="align-items: center;">
+                                    <div class="item-name flexrow" style="flex: 2; align-items: center;">
+                                        <img class="item-rollable" src="{{arme.img}}" title="Attaquer avec {{arme.name}}" width="24" height="24" style="cursor: pointer; margin-right: 8px; border-radius: 3px; border: 1px solid #111;"/>
+                                        <h4 class="item-toggle" style="margin: 0; font-weight: bold; cursor: pointer; color: #e0e0e0; font-size: 0.9em;" title="Voir les détails">{{arme.name}}</h4>
+                                    </div>
+                                    <div class="item-details" style="flex: 1; text-align: center; color: #aaa; font-size: 0.9em;">
+                                        <span>DG: {{#if arme.system.utilise_force}}FOR {{#if (gt arme.system.degats_fixe 0)}}+{{arme.system.degats_fixe}}{{else if (lt arme.system.degats_fixe 0)}}{{arme.system.degats_fixe}}{{/if}}{{else}}{{arme.system.degats_fixe}}{{/if}}</span>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                        <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                        <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                <div class="item-summary" style="display: none; padding-left: 32px; font-size: 0.85em; margin-top: 5px; color: #aaa; border-left: 2px solid #8b0000; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                    <div style="margin-bottom: 3px;"><strong>Type :</strong> {{#if (eq arme.system.type_arme "distance")}}Distance{{else}}Mêlée{{/if}} | <strong>Prise :</strong> {{arme.system.mains}} Main(s)</div>
+                                    {{#if arme.system.special}}<div style="margin-bottom: 3px;"><strong>Spécial :</strong> <span style="color: #d4af37;">{{arme.system.special}}</span></div>{{/if}}
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                    <div class="item-section" style="background: rgba(0,0,0,0.2); padding: 10px; border: 1px solid #333; border-radius: 4px;">
+                        <div class="item-header flexrow" style="border-bottom: 2px solid #d4af37; margin-bottom: 10px;">
+                            <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; color: #e0e0e0;"><i class="fas fa-star" style="color: #d4af37; font-size: 0.9em; margin-right: 5px;"></i> Atouts</h3>
+                            <div class="item-controls" style="text-align: right;">
+                                <a class="item-control item-create" data-type="atout" title="Créer un Atout"><i class="fas fa-plus"></i> Ajouter</a>
+                            </div>
+                        </div>
+                        <ul class="item-list">
+                            {{#each atouts as |atout id|}}
+                            <li class="item flexrow" data-item-id="{{atout._id}}" style="padding: 6px 0; border-bottom: 1px dashed #555; align-items: flex-start;">
+                                <div class="item-name flexcolumn" style="flex: 1;">
+                                    <h4 style="margin: 0; font-weight: bold; font-family: 'Georgia', serif; font-size: 1.05em; color: #e0e0e0; cursor: pointer;" title="Voir la description">{{atout.name}}</h4>
+                                    <div style="font-size: 0.85em; color: #aaa; line-height: 1.3; margin-top: 2px;">
+                                        <strong style="color: #ccc;">{{atout.system.type_atout}}</strong>
+                                        {{#if atout.system.stat_liee}}<span style="text-transform: uppercase;"> ({{atout.system.stat_liee}})</span>{{/if}}
+                                        {{#if atout.system.effet}}<br><em style="color: #85c1e9;">{{atout.system.effet}}</em>{{/if}}
+                                    </div>
+                                </div>
+                                <div class="item-controls" style="flex: 0 0 40px; text-align: right; padding-top: 2px;">
+                                    <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                    <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                </div> </div>
+        </div>
+
+        <div class="tab inventory" data-group="primary" data-tab="inventory">
+            
+            <div class="inventory-grid flexrow" style="gap: 20px; align-items: flex-start; margin-bottom: 20px;">
+                
+                <div class="weapons-col flexcolumn" style="flex: 1; gap: 20px;">
+                    
+                    <div class="item-section">
+                        <div class="item-header flexrow" style="border-bottom: 2px solid #8b0000; margin-bottom: 10px;">
+                            <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; color: #e0e0e0;"><i class="fas fa-khanda" style="color: #8b0000; font-size: 0.9em; margin-right: 5px;"></i> Armes de Mêlée</h3>
+                            <div class="item-controls" style="text-align: right;">
+                                <a class="item-control item-create" data-type="arme" title="Créer Arme"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                        <ul class="item-list">
+                            {{#each armes as |arme id|}}
+                            {{#if (eq arme.system.type_arme "melee")}}
+                            <li class="item flexcolumn" data-item-id="{{arme._id}}" style="padding: 5px 0; border-bottom: 1px dashed #555;">
+                                <div class="flexrow" style="align-items: center;">
+                                    <div class="item-name flexrow" style="flex: 2; align-items: center;">
+                                        <img class="item-rollable" src="{{arme.img}}" title="Attaquer avec {{arme.name}}" width="24" height="24" style="cursor: pointer; margin-right: 8px; border-radius: 3px; border: 1px solid #111;"/>
+                                        <h4 class="item-toggle" style="margin: 0; font-weight: bold; cursor: pointer; color: #e0e0e0; font-size: 0.9em;" title="Voir les détails">{{arme.name}}</h4>
+                                    </div>
+                                    <div class="item-details" style="flex: 1; text-align: center; color: #aaa;">
+                                        <span>DG: {{#if arme.system.utilise_force}}FOR {{#if (gt arme.system.degats_fixe 0)}}+{{arme.system.degats_fixe}}{{else if (lt arme.system.degats_fixe 0)}}{{arme.system.degats_fixe}}{{/if}}{{else}}{{arme.system.degats_fixe}}{{/if}}</span>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                        <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                        <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                
+                                <div class="item-summary" style="display: none; padding-left: 32px; font-size: 0.85em; margin-top: 5px; color: #aaa; border-left: 2px solid #8b0000; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                    <div style="margin-bottom: 3px;"><strong>Prise :</strong> {{arme.system.mains}} Main(s)</div>
+                                    {{#if arme.system.special}}
+                                    <div style="margin-bottom: 3px;"><strong>Spécial :</strong> <span style="color: #d4af37;">{{arme.system.special}}</span></div>
+                                    {{/if}}
+                                    {{#if arme.system.description}}
+                                    <div style="margin-top: 5px; border-top: 1px dashed #444; padding-top: 5px;">{{{arme.system.description}}}</div>
+                                    {{/if}}
+                                </div>
+                            </li>
+                            {{/if}}
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                    <div class="item-section">
+                        <div class="item-header flexrow" style="border-bottom: 2px solid #4a6491; margin-bottom: 10px;">
+                            <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; color: #e0e0e0;"><i class="fas fa-crosshairs" style="color: #4a6491; font-size: 0.9em; margin-right: 5px;"></i> Armes à Distance</h3>
+                            <div class="item-controls" style="text-align: right;">
+                                <a class="item-control item-create" data-type="arme" title="Créer Arme"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                        <ul class="item-list">
+                            {{#each armes as |arme id|}}
+                            {{#if (eq arme.system.type_arme "distance")}}
+                            <li class="item flexcolumn" data-item-id="{{arme._id}}" style="padding: 5px 0; border-bottom: 1px dashed #555;">
+                                <div class="flexrow" style="align-items: center;">
+                                    <div class="item-name flexrow" style="flex: 2; align-items: center;">
+                                        <img class="item-rollable" src="{{arme.img}}" title="Tirer avec {{arme.name}}" width="24" height="24" style="cursor: pointer; margin-right: 8px; border-radius: 3px; border: 1px solid #111;"/>
+                                        <h4 class="item-toggle" style="margin: 0; font-weight: bold; cursor: pointer; color: #e0e0e0; font-size: 0.9em;" title="Voir les détails">{{arme.name}}</h4>
+                                    </div>
+                                    <div class="item-details" style="flex: 1; text-align: center; color: #aaa;">
+                                        <span>DG: {{#if arme.system.utilise_force}}FOR {{#if (gt arme.system.degats_fixe 0)}}+{{arme.system.degats_fixe}}{{else if (lt arme.system.degats_fixe 0)}}{{arme.system.degats_fixe}}{{/if}}{{else}}{{arme.system.degats_fixe}}{{/if}}</span>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                        <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                        <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                
+                                <div class="item-summary" style="display: none; padding-left: 32px; font-size: 0.85em; margin-top: 5px; color: #aaa; border-left: 2px solid #4a6491; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                    <div style="margin-bottom: 3px;"><strong>Prise :</strong> {{arme.system.mains}} Main(s)</div>
+                                    <div style="margin-bottom: 3px;"><strong>Portée :</strong> <span style="color: #85c1e9;">{{arme.system.portee}}</span></div>
+                                    {{#if arme.system.special}}
+                                    <div style="margin-bottom: 3px;"><strong>Spécial :</strong> <span style="color: #d4af37;">{{arme.system.special}}</span></div>
+                                    {{/if}}
+                                    {{#if arme.system.description}}
+                                    <div style="margin-top: 5px; border-top: 1px dashed #444; padding-top: 5px;">{{{arme.system.description}}}</div>
+                                    {{/if}}
+                                </div>
+                            </li>
+                            {{/if}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                    
+                </div> <div class="armors-col" style="flex: 1;">
+                    <div class="item-section">
+                        <div class="item-header flexrow" style="border-bottom: 2px solid #1a5b1a; margin-bottom: 10px;">
+                            <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; color: #e0e0e0;"><i class="fas fa-shield-alt" style="color: #1a5b1a; font-size: 0.9em; margin-right: 5px;"></i> Armures</h3>
+                            <div class="item-controls" style="text-align: right;">
+                                <a class="item-control item-create" data-type="armure" title="Créer Armure"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                        <ul class="item-list">
+                            {{#each armures as |armure id|}}
+                            <li class="item flexcolumn" data-item-id="{{armure._id}}" style="padding: 5px 0; border-bottom: 1px dashed #555;">
+                                <div class="flexrow" style="align-items: center;">
+                                    <div class="item-name flexrow" style="flex: 2; align-items: center;">
+                                        <img src="{{armure.img}}" title="{{armure.name}}" width="24" height="24" style="margin-right: 8px; border-radius: 3px; border: 1px solid #111;"/>
+                                        <h4 class="item-toggle" style="margin: 0; font-weight: bold; cursor: pointer; color: #e0e0e0; font-size: 0.9em;" title="Voir les détails">{{armure.name}}</h4>
+                                    </div>
+                                    <div class="item-details flexrow" style="flex: 1.5; align-items: center; justify-content: flex-end; padding-right: 15px; color: #aaa;">
+                                        <label style="cursor: pointer; margin-right: 10px; font-size: 0.8em; color: #ccc;">
+                                            <input type="checkbox" class="item-equip-toggle" data-item-id="{{armure._id}}" {{checked armure.system.equipe}}/> <i class="fas fa-tshirt" title="Équipée"></i>
+                                        </label>
+                                        <span style="font-size: 0.9em;">Prot: {{armure.system.protection}}</span>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                        <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                        <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="item-summary" style="display: none; padding-left: 32px; font-size: 0.85em; margin-top: 5px; color: #aaa; border-left: 2px solid #1a5b1a; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                    {{#if armure.system.special}}
+                                    <div style="margin-bottom: 3px;"><strong>Spécial :</strong> <span style="color: #d4af37;">{{armure.system.special}}</span></div>
+                                    {{/if}}
+                                    <div style="margin-bottom: 3px;"><strong>Malus Init :</strong> {{armure.system.malus_init}} | <strong>Malus Mouvement :</strong> {{armure.system.malus_mou}}%</div>
+                                    {{#if armure.system.description}}
+                                    <div style="margin-top: 5px; border-top: 1px dashed #444; padding-top: 5px;">{{{armure.system.description}}}</div>
+                                    {{/if}}
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div> </div> 
+
+            <div class="item-section">
+                <div class="item-header flexrow" style="border-bottom: 2px solid #111; margin-bottom: 10px;">
+                    <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif;">Équipement Divers</h3>
+                    <div class="item-controls" style="text-align: right;">
+                        <a class="item-control item-create" data-type="objet" title="Créer un objet"><i class="fas fa-plus"></i> Ajouter</a>
+                    </div>
+                </div>
+                <ul class="item-list">
+                    {{#each objets as |objet id|}}
+                    <li class="item flexcolumn" data-item-id="{{objet._id}}" style="padding: 5px 0; border-bottom: 1px dashed #ccc;">
+                        <div class="flexrow" style="align-items: center;">
+                            <div class="item-name flexrow item-toggle" style="flex: 2; align-items: center; cursor: pointer;" title="Cliquez pour voir la description">
+                                <img src="{{objet.img}}" title="{{objet.name}}" width="24" height="24" style="margin-right: 10px; border-radius: 3px;"/>
+                                <h4 style="margin: 0; font-weight: bold;">{{objet.name}}</h4>
+                            </div>
+                            <div class="item-details flexrow" style="flex: 1.5; align-items: center; justify-content: flex-end; padding-right: 15px; color: #aaa;">
+                                <span style="margin-right: 15px;">Qté: {{objet.system.quantite}}</span>
+                                <span style="margin-right: 15px;">Enc: {{objet.system.encombrement}}</span>
+                                {{#if objet.system.prix}}<span style="font-size: 0.9em; color: #8b6d05;">({{objet.system.prix}})</span>{{/if}}
+                            </div>
+                            <div class="item-controls" style="flex: 0 0 50px; text-align: right;">
+                                <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </div>
+                        
+                        <div class="item-summary" style="display: none; padding-left: 34px; font-size: 0.85em; margin-top: 5px; color: #aaa; border-left: 2px solid #555; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                            {{{objet.system.description}}}
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+
+        {{#if showMagicTab}}
+        <div class="tab spells" data-group="primary" data-tab="spells">
+            <div class="item-section">
+                <div class="item-header flexrow" style="border-bottom: 2px solid #111; margin-bottom: 10px;">
+                    <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif;">Sortilèges & Rituels</h3>
+                    <div class="item-controls" style="text-align: right;">
+                        <a class="item-control item-create" data-type="sort" title="Créer Sort"><i class="fas fa-plus"></i> Ajouter</a>
+                    </div>
+                </div>
+                
+                <div class="magie-config flexrow" style="background: rgba(0,0,0,0.4); padding: 10px; margin-bottom: 15px; border: 1px solid #444; border-radius: 4px; gap: 10px; align-items: flex-start;">
+                    
+                    <div style="flex: 1.5; border-right: 1px dashed #555; padding-right: 10px;">
+                        <h4 style="margin: 0 0 8px 0; font-family: 'Georgia', serif; font-size: 0.9em; border-bottom: 1px solid #444; padding-bottom: 3px; color: #fff;">
+                            Domaines ({{domaines.length}} / {{maxDomaines}})
+                            <a class="item-control item-create" data-type="domaine" title="Ajouter Domaine" style="float: right; color: #aaa;"><i class="fas fa-plus"></i></a>
+                        </h4>
+                        <div class="domaines-grid" style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            {{#each domaines as |dom id|}}
+                            <div class="item domaine-tag" data-item-id="{{dom._id}}" style="background: rgba(0,0,0,0.5); border: 1px solid #d4af37; border-radius: 10px; padding: 2px 8px; font-size: 0.8em; display: flex; align-items: center; gap: 5px;">
+                                <strong class="item-edit" style="cursor: pointer; color: #d4af37;">{{dom.name}}</strong>
+                                <a class="item-control item-delete" style="color: #ff5252;"><i class="fas fa-times"></i></a>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; border-right: 1px dashed #555; padding: 0 10px; font-size: 0.85em; color: #e0e0e0;">
+                        <h4 style="margin: 0 0 8px 0; font-family: 'Georgia', serif; font-size: 0.9em; border-bottom: 1px solid #444; padding-bottom: 3px; color: #fff;">
+                            Création (*CNS*)
+                        </h4>
+                        <div style="margin-bottom: 3px; color: #e0e0e0;">Tours : <strong style="color: #d4af37;">{{nbToursActuels}} / {{creationSorts}}</strong></div>
+                        <div style="color: #e0e0e0;">Sorts : <strong style="color: #ff5252;">{{nbSortsActuels}} / {{creationSorts}}</strong></div>
+                    </div>
+
+                    <div style="flex: 1; border-right: 1px dashed #555; padding: 0 10px;">
+                        <h4 style="margin: 0 0 8px 0; font-family: 'Georgia', serif; font-size: 0.9em; border-bottom: 1px solid #444; padding-bottom: 3px; color: #fff;">
+                            Incantation
+                        </h4>
+                        <select name="system.stat_magie_defaut" style="width: 100%; padding: 2px; font-family: 'Palatino Linotype', serif; background: #111; color: #eee; border: 1px solid #555;">
+                            {{selectOptions magicOptions selected=system.stat_magie_defaut}}
+                        </select>
+                    </div>
+
+                    <div style="flex: 1.5; padding-left: 10px; color: #e0e0e0;">
+                        <h4 style="margin: 0 0 8px 0; font-family: 'Georgia', serif; font-size: 0.9em; border-bottom: 1px solid #444; padding-bottom: 3px; color: #fff;">
+                            Utilisations / Jour
+                        </h4>
+                        
+                        <div class="flexrow" style="align-items: center; margin-bottom: 4px; font-size: 0.85em; color: #e0e0e0;">
+                            <span style="flex: 0 0 50px; color: #e0e0e0;">Tours:</span>
+                            <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 3px;">
+                                {{#each toursBoxes}}
+                                    <a class="spell-use-box {{#if this.checked}}checked{{else}}empty{{/if}}" data-type="tours" data-value="{{this.value}}" style="width: 12px; height: 12px; border: 1px solid #777; border-radius: 2px; background: {{#if this.checked}}#4a6491{{else}}rgba(255,255,255,0.05){{/if}}; cursor: pointer;" title="Tour n°{{this.value}}"></a>
+                                {{/each}}
+                            </div>
+                        </div>
+
+                        <div class="flexrow" style="align-items: center; margin-bottom: 4px; font-size: 0.85em; color: #e0e0e0;">
+                            <span style="flex: 0 0 50px; color: #e0e0e0;">Sorts:</span>
+                            <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 3px;">
+                                {{#each sortsBoxes}}
+                                    <a class="spell-use-box {{#if this.checked}}checked{{else}}empty{{/if}}" data-type="sorts" data-value="{{this.value}}" style="width: 12px; height: 12px; border: 1px solid #777; border-radius: 2px; background: {{#if this.checked}}#d32f2f{{else}}rgba(255,255,255,0.05){{/if}}; cursor: pointer;" title="Sortilège n°{{this.value}}"></a>
+                                {{/each}}
+                            </div>
+                        </div>
+
+                        <div class="flexrow" style="align-items: center; font-size: 0.85em; color: #e0e0e0;">
+                            <span style="flex: 0 0 50px; color: #e0e0e0;">Rituels:</span>
+                            <div style="flex: 1;">
+                                <a class="spell-use-box {{#if rituelBox.checked}}checked{{else}}empty{{/if}}" data-type="rituels" data-value="1" style="display: inline-block; width: 12px; height: 12px; border: 1px solid #777; border-radius: 2px; background: {{#if rituelBox.checked}}#1a5b1a{{else}}rgba(255,255,255,0.05){{/if}}; cursor: pointer;" title="1 Rituel max/jour"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="spells-grid flexrow" style="gap: 20px; align-items: flex-start;">
+                    
+                    <div class="spells-col" style="flex: 1; background: rgba(0,0,0,0.2); padding: 10px; border: 1px solid #333; border-radius: 4px;">
+                        <h3 style="font-family: 'Georgia', serif; border-bottom: 2px solid #d4af37; color: #d4af37; margin-top: 0; margin-bottom: 10px; font-size: 1.1em;">
+                            <i class="fas fa-sparkles"></i> Tours de magie
+                        </h3>
+                        <ul class="item-list">
+                            {{#each sorts as |sort id|}}
+                            {{#if (eq sort.system.type_sort "tour")}}
+                            <li class="item flexcolumn" data-item-id="{{sort._id}}" style="padding: 5px 0; border-bottom: 1px dashed #555;">
+                                <div class="flexrow" style="align-items: center;">
+                                    <div class="item-name flexrow" style="flex: 1; align-items: center;">
+                                        <img class="spell-roll" src="{{sort.img}}" title="Lancer le tour" width="32" height="32" style="margin-right: 10px; cursor: pointer; border: 1px solid #111; border-radius: 3px;"/>
+                                        <h4 class="item-toggle" style="margin: 0; color: #e0e0e0; font-size: 0.95em; cursor: pointer;" title="Voir les détails">
+                                            {{sort.name}}
+                                            {{#if sort.system.domaine}}
+                                            <br><span style="font-size: 0.85em; font-weight: normal; color: #999; font-style: italic;">({{sort.system.domaine}})</span>
+                                            {{/if}}
+                                        </h4>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                        <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                        <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                <div class="item-summary" style="display: none; padding-left: 42px; font-size: 0.85em; margin-top: 5px; color: #aaa; border-left: 2px solid #d4af37; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                    {{#if sort.system.portee}}<div style="margin-bottom: 3px;"><strong>Portée :</strong> {{sort.system.portee}}</div>{{/if}}
+                                    {{#if sort.system.duree}}<div style="margin-bottom: 3px;"><strong>Durée :</strong> {{sort.system.duree}}</div>{{/if}}
+                                    {{#if sort.system.description}}<div style="margin-top: 5px; border-top: 1px dashed #444; padding-top: 5px;">{{{sort.system.description}}}</div>{{/if}}
+                                </div>
+                            </li>
+                            {{/if}}
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                    <div class="spells-col" style="flex: 1; background: rgba(0,0,0,0.2); padding: 10px; border: 1px solid #333; border-radius: 4px;">
+                        <h3 style="font-family: 'Georgia', serif; border-bottom: 2px solid #d32f2f; color: #d32f2f; margin-top: 0; margin-bottom: 10px; font-size: 1.1em;">
+                            <i class="fas fa-fire"></i> Sortilèges & Rituels
+                        </h3>
+                        <ul class="item-list">
+                            {{#each sorts as |sort id|}}
+                            {{#unless (eq sort.system.type_sort "tour")}}
+                            <li class="item flexcolumn" data-item-id="{{sort._id}}" style="padding: 5px 0; border-bottom: 1px dashed #555;">
+                                <div class="flexrow" style="align-items: center;">
+                                    <div class="item-name flexrow" style="flex: 1; align-items: center;">
+                                        <img class="spell-roll" src="{{sort.img}}" title="Lancer le sort" width="32" height="32" style="margin-right: 10px; cursor: pointer; border: 1px solid #111; border-radius: 3px;"/>
+                                        <h4 class="item-toggle" style="margin: 0; color: #e0e0e0; font-size: 0.95em; cursor: pointer;" title="Voir les détails">
+                                            {{#if (eq sort.system.type_sort "rituel")}}<i class="fas fa-scroll" style="color: #4a6491;" title="Rituel"></i> {{/if}}
+                                            {{sort.name}}
+                                            {{#if sort.system.domaine}}
+                                            <br><span style="font-size: 0.85em; font-weight: normal; color: #999; font-style: italic;">({{sort.system.domaine}})</span>
+                                            {{/if}}
+                                        </h4>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                        <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                        <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                <div class="item-summary" style="display: none; padding-left: 42px; font-size: 0.85em; margin-top: 5px; color: #aaa; border-left: 2px solid #d32f2f; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                    <div style="margin-bottom: 3px;"><strong>Difficulté :</strong> <span style="color: #ffcccc;">{{sort.system.difficulte}}</span></div>
+                                    {{#if sort.system.portee}}<div style="margin-bottom: 3px;"><strong>Portée :</strong> {{sort.system.portee}}</div>{{/if}}
+                                    {{#if sort.system.duree}}<div style="margin-bottom: 3px;"><strong>Durée :</strong> {{sort.system.duree}}</div>{{/if}}
+                                    {{#if sort.system.description}}<div style="margin-top: 5px; border-top: 1px dashed #444; padding-top: 5px;">{{{sort.system.description}}}</div>{{/if}}
+                                </div>
+                            </li>
+                            {{/unless}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="tab biography" data-group="primary" data-tab="biography">
+            
+            {{#if (eq actor.type "personnage")}}
+            <div class="flexrow" style="gap: 15px; align-items: flex-start; margin-bottom: 20px;">
+                
+                <div class="item-section" style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid #333; border-radius: 4px; padding: 10px;">
+                    <div class="item-header flexrow" style="border-bottom: 1px solid #555; margin-bottom: 10px; align-items: center;">
+                        <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; font-size: 1.1em; color: #fff;">Origine</h3>
+                        <div class="item-controls" style="text-align: right;">
+                            <a class="item-control item-create" data-type="origine" title="Ajouter une Origine"><i class="fas fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <ul class="item-list">
+                        {{#each origines as |origine id|}}
+                        <li class="item flexcolumn" data-item-id="{{origine._id}}" style="padding: 5px 0;">
+                            <div class="flexrow" style="align-items: center;">
+                                <div class="item-name flexrow" style="flex: 1; align-items: center;">
+                                    <img src="{{origine.img}}" title="{{origine.name}}" width="24" height="24" style="margin-right: 8px; border-radius: 3px; border: 1px solid #111;"/>
+                                    <h4 style="margin: 0; font-weight: bold; font-size: 0.9em; color: #e0e0e0;">{{origine.name}}</h4>
+                                </div>
+                                <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                    <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                    <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.8em; color: #aaa; margin-top: 5px; border-left: 2px solid #555; padding-left: 5px;">
+                                {{#if origine.system.special}}
+                                <div style="margin-bottom: 2px;"><strong>Spécial :</strong> <span style="color: #2ecc71;">{{origine.system.special}}</span></div>
+                                {{/if}}
+                                {{#if origine.system.limitation}}
+                                <div><strong>Limitation :</strong> <span style="color: #e74c3c;">{{origine.system.limitation}}</span></div>
+                                {{/if}}
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+
+                <div class="item-section" style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid #333; border-radius: 4px; padding: 10px;">
+                    <div class="item-header flexrow" style="border-bottom: 1px solid #555; margin-bottom: 10px; align-items: center;">
+                        <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; font-size: 1.1em; color: #fff;">Archétype</h3>
+                        <div class="item-controls" style="text-align: right;">
+                            <a class="item-control item-create" data-type="archetype" title="Ajouter un Archétype"><i class="fas fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <ul class="item-list">
+                        {{#each archetypes as |archetype id|}}
+                        <li class="item flexcolumn" data-item-id="{{archetype._id}}" style="padding: 5px 0;">
+                            <div class="flexrow" style="align-items: center;">
+                                <div class="item-name flexrow item-toggle" style="flex: 1; align-items: center; cursor: pointer;">
+                                    <img src="{{archetype.img}}" title="{{archetype.name}}" width="24" height="24" style="margin-right: 8px; border-radius: 3px; border: 1px solid #111;"/>
+                                    <h4 style="margin: 0; font-weight: bold; font-size: 0.9em; color: #e0e0e0;" title="Voir les détails">{{archetype.name}}</h4>
+                                </div>
+                                <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                    <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                    <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </div>
+                            <div class="item-summary" style="display: none; font-size: 0.8em; color: #aaa; margin-top: 5px; border-left: 2px solid #555; padding-left: 5px; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                {{#if archetype.system.vices_vertus}}
+                                <div style="margin-bottom: 3px;"><strong>Vices & Vertus :</strong> <span style="color: #85c1e9;">{{archetype.system.vices_vertus}}</span></div>
+                                {{/if}}
+                                {{#if archetype.system.talents}}
+                                <div style="margin-bottom: 3px;"><strong>Talents :</strong> <span style="color: #d4af37;">{{archetype.system.talents}}</span></div>
+                                {{/if}}
+                                {{#if archetype.system.description}}
+                                <div style="margin-top: 5px; border-top: 1px dashed #444; padding-top: 5px;">{{{archetype.system.description}}}</div>
+                                {{/if}}
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+
+                <div class="item-section" style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid #333; border-radius: 4px; padding: 10px;">
+                    <div class="item-header flexrow" style="border-bottom: 1px solid #555; margin-bottom: 10px; align-items: center;">
+                        <h3 class="item-title" style="margin: 0; font-family: 'Georgia', serif; font-size: 1.1em; color: #fff;">Carrière</h3>
+                        <div class="item-controls" style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
+                            {{#if carrieres.length}}
+                            <a class="item-control archive-career" title="Archiver la carrière" style="color: #d4af37;"><i class="fas fa-history"></i></a>
+                            {{/if}}
+                            <a class="item-control item-create" data-type="carriere" title="Ajouter une Carrière"><i class="fas fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <ul class="item-list">
+                        {{#each carrieres as |carriere id|}}
+                        <li class="item flexcolumn" data-item-id="{{carriere._id}}" style="padding: 5px 0;">
+                            <div class="flexrow" style="align-items: center;">
+                                <div class="item-name flexrow item-toggle" style="flex: 1; align-items: center; cursor: pointer;">
+                                    <img src="{{carriere.img}}" width="24" height="24" style="margin-right: 8px; border-radius: 3px; border: 1px solid #111;"/>
+                                    <h4 style="margin: 0; font-weight: bold; font-size: 0.9em; color: #e0e0e0;" title="Voir les détails">{{carriere.name}}</h4>
+                                </div>
+                                <div class="item-controls" style="flex: 0 0 40px; text-align: right;">
+                                    <a class="item-control item-edit" title="Éditer"><i class="fas fa-edit"></i></a>
+                                    <a class="item-control item-delete" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </div>
+                            <div class="item-summary" style="display: none; font-size: 0.8em; color: #aaa; margin-top: 5px; border-left: 2px solid #555; padding-left: 5px; background: rgba(0,0,0,0.02); padding-top: 4px; padding-bottom: 4px;">
+                                {{#if carriere.system.specialites}}
+                                <div style="margin-bottom: 3px; color: #e0e0e0;"><strong>Spécialités :</strong> <span style="color: #85c1e9;">{{carriere.system.specialites}}</span></div>
+                                {{/if}}
+                                {{#if carriere.system.talents}}
+                                <div style="margin-bottom: 3px; color: #e0e0e0;"><strong>Talents :</strong> <span style="color: #d4af37;">{{carriere.system.talents}}</span></div>
+                                {{/if}}
+                                {{#if carriere.system.equipement}}
+                                <div style="color: #e0e0e0;"><strong>Équipement :</strong> <span style="color: #aaa; font-style: italic;">{{carriere.system.equipement}}</span></div>
+                                {{/if}}
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+
+            </div>
+            <div class="vices-vertus-container flexrow" style="gap: 20px; margin-bottom: 20px; background: rgba(0,0,0,0.02); padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                
+                <div class="vertus-col flexcolumn" style="flex: 1;">
+                    <h3 style="font-family: 'Georgia', serif; border-bottom: 2px solid #1a5b1a; color: #1a5b1a; margin: 0 0 10px 0; font-size: 1.2em;">
+                        <i class="fas fa-balance-scale-right"></i> Vertus
+                    </h3>
+                    <div class="flexrow" style="margin-bottom: 5px; font-weight: bold; font-size: 0.85em; color: #555;">
+                        <span style="flex: 3;">Nom de la vertu</span>
+                        <span style="flex: 1; text-align: center;">Indice</span>
+                    </div>
+                    {{#each system.vertus as |vertu key|}}
+                    <div class="flexrow" style="margin-bottom: 5px; gap: 5px; align-items: center;">
+                        <input type="text" name="system.vertus.{{key}}.nom" value="{{vertu.nom}}" placeholder="Ex: Courageux..." style="flex: 3; background: #fff;" />
+                        <input type="text" name="system.vertus.{{key}}.valeur" value="{{vertu.valeur}}" placeholder="+1" style="flex: 1; text-align: center; background: #fff;" />
+                    </div>
+                    {{/each}}
+                </div>
+
+                <div class="vices-col flexcolumn" style="flex: 1;">
+                    <h3 style="font-family: 'Georgia', serif; border-bottom: 2px solid #8b0000; color: #8b0000; margin: 0 0 10px 0; font-size: 1.2em;">
+                        <i class="fas fa-balance-scale-left"></i> Vices
+                    </h3>
+                    <div class="flexrow" style="margin-bottom: 5px; font-weight: bold; font-size: 0.85em; color: #555;">
+                        <span style="flex: 3;">Nom du vice</span>
+                        <span style="flex: 1; text-align: center;">Indice</span>
+                    </div>
+                    {{#each system.vices as |vice key|}}
+                    <div class="flexrow" style="margin-bottom: 5px; gap: 5px; align-items: center;">
+                        <input type="text" name="system.vices.{{key}}.nom" value="{{vice.nom}}" placeholder="Ex: Orgueilleux..." style="flex: 3; background: #fff;" />
+                        <input type="text" name="system.vices.{{key}}.valeur" value="{{vice.valeur}}" placeholder="+1" style="flex: 1; text-align: center; background: #fff;" />
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            
+            <div class="bio-field" style="margin-bottom: 15px;">
+                <label style="font-weight: bold; font-family: 'Georgia', serif;">Anciennes Carrières</label>
+                <input type="text" name="system.carrieres_historiques" value="{{system.carrieres_historiques}}" placeholder="Ex: Mendiant, Milicien..."/>
+            </div>
+            
+            {{/if}}
+
+            <h3 style="font-family: 'Georgia', serif; border-bottom: 1px solid #111;">
+                {{#if (eq actor.type "personnage")}}Historique{{else}}Description du PNJ{{/if}}
+            </h3>
+            <div class="editor-container">
+                {{#if (eq actor.type "personnage")}}
+                    {{editor system.biographie target="system.biographie" button=true owner=owner editable=editable}}
+                {{else}}
+                    {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+                {{/if}}
+            </div>
+
+        </div> </section> 
+
+    <hr style="border: 1px solid #111; margin-top: 20px;">
+    <div class="flexrow" style="gap: 15px; text-align: center; font-family: 'Georgia', serif;">
+        <div style="border: 1px solid #111; padding: 5px; background: rgba(255,255,255,0.5);">
+            <label style="font-weight: bold; text-transform: uppercase;">Vitalité</label>
+            <input type="number" name="system.vitalite.value" value="{{system.vitalite.value}}" style="width: 40px; background: transparent; border: none; font-size: 1.2em; text-align: center;"/> 
+            / <span style="font-size: 1.2em; color: #555;">{{system.vitalite.max}}</span>
+        </div>
+        
+        <div style="border: 1px solid #111; padding: 5px; background: rgba(255,255,255,0.5);">
+            <label style="font-weight: bold; text-transform: uppercase;">Sang-Froid</label>
+            <input type="number" name="system.sangfroid.value" value="{{system.sangfroid.value}}" style="width: 40px; background: transparent; border: none; font-size: 1.2em; text-align: center;"/> 
+            / <span style="font-size: 1.2em; color: #555;">{{system.sangfroid.max}}</span>
+        </div>
+
+        {{#if (eq actor.type "personnage")}}
+        <div style="border: 1px solid #111; padding: 5px; background: rgba(255,255,255,0.5);">
+            <label style="font-weight: bold; text-transform: uppercase;">Destin</label>
+            <input type="number" name="system.destin.value" value="{{system.destin.value}}" style="width: 40px; background: transparent; border: none; font-size: 1.2em; text-align: center;"/>
+            / <span style="font-size: 1.2em; color: #555;" title="Max défini par l'Origine">{{system.destin.max}}</span>
+        </div>
+
+        <div style="border: 1px solid #111; padding: 5px; background: rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <label style="font-weight: bold; text-transform: uppercase;">Expérience</label>
+                <input type="number" name="system.experience.value" value="{{system.experience.value}}" style="width: 50px; background: transparent; border: none; font-size: 1.2em; text-align: center;"/>
+            </div>
+            <a class="spend-xp-btn" title="Dépenser des PX (Atouts, Carrière...)" style="color: #8b0000; font-size: 1.2em; cursor: pointer; padding: 0 5px;">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+        </div>
+        {{/if}}
+    </div>
+</form>

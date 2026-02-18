@@ -1,0 +1,29 @@
+{
+  "id": "brigandyne",
+  "title": "Brigandyne V2",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Bobby Jo",
+      "flags": {}
+    }
+  ],
+  "esmodules": [
+    "scripts/brigandyne.js"
+  ],
+  "styles": [
+    "styles/brigandyne.css"
+  ],
+  "template": "template.json", 
+  "packs": [],
+  "packs": [],
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "",
+  "readme": ""
+}

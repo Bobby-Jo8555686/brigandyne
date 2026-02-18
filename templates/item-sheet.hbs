@@ -1,0 +1,443 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header flexrow">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+        <div class="header-details">
+            <h1 class="charname">
+                <input name="name" type="text" value="{{item.name}}" placeholder="Nom de l'objet"/>
+            </h1>
+        </div>
+    </header>
+
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="details">Détails</a>
+        <a class="item" data-tab="description">Description</a>
+    </nav>
+
+    <section class="sheet-body">
+        
+        <div class="tab details" data-group="primary" data-tab="details">
+            <div class="item-grid">
+                
+                {{#if isArme}}
+                <div class="form-group">
+                    <label>Type d'arme</label>
+                    <select name="system.type_arme">
+                        <option value="melee" {{#if (eq system.type_arme "melee")}}selected{{/if}}>Mêlée (Combat)</option>
+                        <option value="distance" {{#if (eq system.type_arme "distance")}}selected{{/if}}>Distance (Tir)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="align-items: center;">
+                    <label title="Cochez si l'arme ajoute l'Indice de Force aux dégâts (Ex: Épée, Hache).">Ajoute la Force (FOR) aux dégâts</label>
+                    <input type="checkbox" name="system.utilise_force" {{checked system.utilise_force}} style="flex: 0 0 20px;" />
+                </div>
+
+                <div class="form-group">
+                    <label title="Le score fixe ou le modificateur de l'arme (Ex: 0 pour une épée classique, 5 pour une arbalète, -2 pour une dague).">Dégâts de l'arme (Modificateur / Fixe)</label>
+                    <input type="number" name="system.degats_fixe" value="{{system.degats_fixe}}" placeholder="Ex: 0, 5, -2..."/>
+                </div>
+
+                {{#if (eq system.type_arme "distance")}}
+                <div class="form-group">
+                    <label>Portée</label>
+                    <select name="system.portee">
+                        {{#select system.portee}}
+                        <option value="">- Aucune -</option>
+                        <option value="Courte">Courte</option>
+                        <option value="Moyenne">Moyenne</option>
+                        <option value="Longue">Longue</option>
+                        <option value="Extrême">Extrême</option>
+                        {{/select}}
+                    </select>
+                </div>
+                {{/if}}
+
+                <div class="form-group">
+                    <label>Mains (Prise)</label>
+                    <select name="system.mains">
+                        {{#select system.mains}}
+                        <option value="1">1 Main</option>
+                        <option value="2">2 Mains</option>
+                        {{/select}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Spécial</label>
+                    <input type="text" name="system.special" value="{{system.special}}" placeholder="Ex: Assommante, Armure /2..."/>
+                </div>
+
+                <div class="flexrow" style="gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Encombrement</label>
+                        <input type="number" name="system.encombrement" value="{{system.encombrement}}"/>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Prix (co / ca)</label>
+                        <input type="text" name="system.prix" value="{{system.prix}}" placeholder="Ex: 30 / 2"/>
+                    </div>
+                </div>
+                {{/if}}
+
+                {{#if isArmure}}
+                <div class="form-group">
+                    <label>Équipée</label>
+                    <input type="checkbox" name="system.equipe" {{checked system.equipe}}/>
+                </div>
+                <div class="form-group">
+                    <label>Protection</label>
+                    <input type="number" name="system.protection" value="{{system.protection}}"/>
+                </div>
+                <div class="form-group">
+                    <label>Malus Initiative</label>
+                    <input type="number" name="system.malus_init" value="{{system.malus_init}}" placeholder="Ex: 2"/>
+                </div>
+                <div class="form-group">
+                    <label>Malus Mouvement (%)</label>
+                    <input type="number" name="system.malus_mou" value="{{system.malus_mou}}" placeholder="Ex: 5"/>
+                </div>
+                <div class="form-group">
+                    <label>Encombrement</label>
+                    <input type="number" name="system.encombrement" value="{{system.encombrement}}"/>
+                </div>
+                <div class="form-group">
+                    <label>Spécial</label>
+                    <input type="text" name="system.special" value="{{system.special}}" placeholder="Ex: Init -1..."/>
+                </div>
+                {{/if}}
+
+                {{#if isObjet}}
+                <div class="form-group">
+                    <label>Quantité</label>
+                    <input type="number" name="system.quantite" value="{{system.quantite}}"/>
+                </div>
+                <div class="form-group">
+                    <label>Encombrement (Unitaire)</label>
+                    <input type="number" name="system.encombrement" value="{{system.encombrement}}"/>
+                </div>
+                <div class="form-group">
+                    <label>Prix</label>
+                    <input type="text" name="system.prix" value="{{system.prix}}" placeholder="Ex: 5 ca"/>
+                </div>
+                {{/if}}
+
+                {{#if isAtout}}
+                <div class="form-group">
+                    <label>Type</label>
+                    <select name="system.type_atout">
+                        {{#select system.type_atout}}
+                        <option value="Spécialité">Spécialité</option>
+                        <option value="Talent">Talent (Règle spéciale)</option>
+                        {{/select}}
+                    </select>
+                </div>
+                
+                {{#if (eq system.type_atout "Spécialité")}}
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Spécialité</label>
+                    <div style="display: flex; flex-direction: column; flex: 1; gap: 5px;">
+                        <input type="text" class="search-list" data-target="select[name='system.specialite']" placeholder="🔍 Taper pour filtrer..." style="width: 100%; border: 1px solid #777; background: rgba(0,0,0,0.05); padding: 4px;"/>
+                        <select name="system.specialite" style="width: 100%; padding: 5px; background: #fff;" size="6">
+                            <option value="">-- Choisissez une spécialité --</option>
+                            {{selectOptions specialitesList selected=system.specialite}}
+                        </select>
+                    </div>
+                </div>
+                {{/if}}
+
+                {{#if (eq system.type_atout "Talent")}}
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Talent</label>
+                    <div style="display: flex; flex-direction: column; flex: 1; gap: 5px;">
+                        <input type="text" class="search-list" data-target="select[name='system.talent']" placeholder="🔍 Taper pour filtrer..." style="width: 100%; border: 1px solid #777; background: rgba(0,0,0,0.05); padding: 4px;"/>
+                        <select name="system.talent" style="width: 100%; padding: 5px; background: #fff;" size="6">
+                            <option value="">-- Choisissez un talent --</option>
+                            {{selectOptions talentsList selected=system.talent}}
+                        </select>
+                    </div>
+                </div>
+                {{/if}}
+                
+                <div class="form-group">
+                    <label>Compétence liée</label>
+                    <select name="system.stat_liee">
+                        {{#select system.stat_liee}}
+                        <option value="">- Aucune / Globale -</option>
+                        <option value="com">Combat</option>
+                        <option value="cns">Connaissances</option>
+                        <option value="dis">Discrétion</option>
+                        <option value="end">Endurance</option>
+                        <option value="for">Force</option>
+                        <option value="hab">Habileté</option>
+                        <option value="mag">Magie</option>
+                        <option value="mou">Mouvement</option>
+                        <option value="per">Perception</option>
+                        <option value="soc">Sociabilité</option>
+                        <option value="sur">Survie</option>
+                        <option value="tir">Tir</option>
+                        <option value="vol">Volonté</option>
+                        {{/select}}
+                    </select>
+                </div>
+
+                {{#if (eq system.type_atout "Spécialité")}}
+                <div class="form-group">
+                    <label>Bonus</label>
+                    <input type="number" name="system.bonus" value="{{system.bonus}}" placeholder="Ex: 10, 20 ou 5"/>
+                </div>
+                {{/if}}
+
+                <div class="form-group">
+                    <label>Effet / Condition</label>
+                    <input type="text" name="system.effet" value="{{system.effet}}" placeholder="Ex: Quand je cible une armure complète..."/>
+                </div>
+                {{/if}}
+
+               {{#if isDomaine}}
+                <div class="domaine-grimoire" style="font-family: 'Palatino Linotype', serif;">
+                    <p style="font-style: italic; color: #aaa; border-bottom: 1px solid #444; padding-bottom: 5px; margin-bottom: 15px;">
+                        <i class="fas fa-info-circle"></i> Glissez des Sorts ou Tours depuis l'onglet Objets pour les lier à ce domaine.
+                    </p>
+
+                    <div class="flexrow" style="gap: 20px; align-items: flex-start;">
+                        
+                        <div class="grimoire-col flexcolumn" style="flex: 1; background: rgba(0,0,0,0.2); padding: 10px; border: 1px solid #333; border-radius: 4px;">
+                            <h3 style="font-family: 'Georgia', serif; border-bottom: 2px solid #d4af37; color: #d4af37; margin: 0 0 10px 0; font-size: 1.1em;">
+                                <i class="fas fa-sparkles"></i> Tours
+                            </h3>
+                            <ul class="item-list" style="list-style: none; margin: 0; padding: 0;">
+                                {{#each system.spells}}
+                                    {{#if (eq type_sort "tour")}}
+                                    <li class="item flexcolumn" style="padding: 5px 0; border-bottom: 1px dashed #555;">
+                                        <div class="flexrow" style="align-items: center;">
+                                            <div class="item-name flexrow" style="flex: 1; align-items: center;">
+                                                <img src="{{img}}" width="24" height="24" style="margin-right: 8px; border-radius: 3px; border: 1px solid #111; background: #000;"/>
+                                                <h4 style="margin: 0; color: #e0e0e0; font-size: 0.9em;">{{name}}</h4>
+                                            </div>
+                                            <div class="item-controls" style="flex: 0 0 30px; text-align: right;">
+                                                <a class="spell-delete" data-index="{{@index}}" title="Retirer du domaine" style="color: #777; cursor: pointer;"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {{/if}}
+                                {{/each}}
+                            </ul>
+                        </div>
+
+                        <div class="grimoire-col flexcolumn" style="flex: 1; background: rgba(0,0,0,0.2); padding: 10px; border: 1px solid #333; border-radius: 4px;">
+                            <h3 style="font-family: 'Georgia', serif; border-bottom: 2px solid #d32f2f; color: #d32f2f; margin: 0 0 10px 0; font-size: 1.1em;">
+                                <i class="fas fa-fire"></i> Sortilèges & Rituels
+                            </h3>
+                            <ul class="item-list" style="list-style: none; margin: 0; padding: 0;">
+                                {{#each system.spells}}
+                                    {{#unless (eq type_sort "tour")}}
+                                    <li class="item flexcolumn" style="padding: 5px 0; border-bottom: 1px dashed #555;">
+                                        <div class="flexrow" style="align-items: center;">
+                                            <div class="item-name flexrow" style="flex: 1; align-items: center;">
+                                                <img src="{{img}}" width="24" height="24" style="margin-right: 8px; border-radius: 3px; border: 1px solid #111; background: #000;"/>
+                                                <div style="display: flex; flex-direction: column;">
+                                                    <h4 style="margin: 0; color: #e0e0e0; font-size: 0.9em;">{{name}}</h4>
+                                                    <span style="font-size: 0.8em; color: #999;">
+                                                        {{#if (eq type_sort "rituel")}}<i class="fas fa-scroll" style="color: #4a6491;" title="Rituel"></i> Rituel{{else}}Sortilège{{/if}} ({{#if difficulte}}{{difficulte}}{{else}}0{{/if}})
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="item-controls" style="flex: 0 0 30px; text-align: right;">
+                                                <a class="spell-delete" data-index="{{@index}}" title="Retirer du domaine" style="color: #777; cursor: pointer;"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {{/unless}}
+                                {{/each}}
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+                {{/if}}
+                
+                {{#if isSort}}
+                <div class="form-group">
+                    <label>Type d'incantation</label>
+                    <select name="system.type_sort">
+                        {{#select system.type_sort}}
+                        <option value="sortilege">Sortilège (Normal)</option>
+                        <option value="tour">Tour de Magie</option>
+                        <option value="rituel">Rituel (Action longue)</option>
+                        {{/select}}
+                    </select>
+                </div>
+                
+                {{#if isNotTour}}
+                <div class="form-group">
+                    <label>Source (Domaine, Grimoire...)</label>
+                    <input type="text" name="system.domaine" value="{{system.domaine}}" placeholder="Information narrative (facultative)"/>
+                </div>
+                
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Formule magique</label>
+                    <textarea name="system.formule" rows="2" placeholder="Phrase prononcée pour gagner +5% au test">{{system.formule}}</textarea>
+                </div>
+                
+                <div class="flexrow" style="gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Difficulté (Mod.)</label>
+                        <input type="number" name="system.difficulte" value="{{system.difficulte}}" placeholder="Ex: -10, +20..."/>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Portée</label>
+                        <select name="system.portee">
+                            {{#select system.portee}}
+                            <option value="Contact">Contact (1 m)</option>
+                            <option value="Courte">Courte (5 m)</option>
+                            <option value="Moyenne">Moyenne (20 m)</option>
+                            <option value="Longue">Longue (50 m)</option>
+                            <option value="Extrême">Extrême (100 m)</option>
+                            <option value="Vue">À vue</option>
+                            <option value="Personnel">Personnel</option>
+                            {{/select}}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flexrow" style="gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Durée</label>
+                        <input type="text" name="system.duree" value="{{system.duree}}" placeholder="Ex: RU+1 tours"/>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Résistance</label>
+                        <input type="text" name="system.resistance" value="{{system.resistance}}" placeholder="Ex: MOU, Aucune..."/>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px; color: #8b0000; font-weight: bold;">Effet R+</label>
+                    <textarea name="system.r_plus" rows="2" placeholder="Effet spécial en cas de réussite majeure ou critique">{{system.r_plus}}</textarea>
+                </div>
+                {{/if}}
+                {{/if}}
+
+                {{#if isOrigine}}
+                <div class="flexrow" style="gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Bonus Vitalité (Max)</label>
+                        <input type="number" name="system.bonus_vit" value="{{system.bonus_vit}}" placeholder="Ex: 1, 2..."/>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Bonus Sang-Froid (Max)</label>
+                        <input type="number" name="system.bonus_sf" value="{{system.bonus_sf}}" placeholder="Ex: 1"/>
+                    </div>
+                </div>
+
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;" title="Séparés par une virgule. Ex: Nyctalopie, Résistance aux maladies">Talents automatiques</label>
+                    <textarea name="system.talents_auto" rows="2" placeholder="Ex: Nyctalopie, Résistance aux maladies...">{{system.talents_auto}}</textarea>
+                    <p style="font-size: 0.8em; color: #777; margin-top: 2px;">Seront générés automatiquement dans l'onglet Atouts du PJ.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Spécial (Autre info narrative)</label>
+                    <input type="text" name="system.special" value="{{system.special}}" placeholder="Ex: Don particulier..."/>
+                </div>
+                <div class="form-group">
+                    <label>Limitation (Défaut)</label>
+                    <input type="text" name="system.limitation" value="{{system.limitation}}" placeholder="Ex: Ne peut porter d'armure lourde..."/>
+                </div>
+                <div class="form-group">
+                    <label>Points de Destin de base</label>
+                    <input type="number" name="system.destin" value="{{system.destin}}" placeholder="Ex: 3"/>
+                </div>
+                <h3 style="margin-top: 15px; border-bottom: 1px solid #ccc;">Modificateurs de Compétences</h3>
+                <div class="stats-modifiers-grid">
+                    <div class="stat-mod"><label>COM</label><input type="number" name="system.stats.com" value="{{system.stats.com}}"/></div>
+                    <div class="stat-mod"><label>CNS</label><input type="number" name="system.stats.cns" value="{{system.stats.cns}}"/></div>
+                    <div class="stat-mod"><label>DIS</label><input type="number" name="system.stats.dis" value="{{system.stats.dis}}"/></div>
+                    <div class="stat-mod"><label>END</label><input type="number" name="system.stats.end" value="{{system.stats.end}}"/></div>
+                    <div class="stat-mod"><label>FOR</label><input type="number" name="system.stats.for" value="{{system.stats.for}}"/></div>
+                    <div class="stat-mod"><label>HAB</label><input type="number" name="system.stats.hab" value="{{system.stats.hab}}"/></div>
+                    <div class="stat-mod"><label>MAG</label><input type="number" name="system.stats.mag" value="{{system.stats.mag}}"/></div>
+                    <div class="stat-mod"><label>MOU</label><input type="number" name="system.stats.mou" value="{{system.stats.mou}}"/></div>
+                    <div class="stat-mod"><label>PER</label><input type="number" name="system.stats.per" value="{{system.stats.per}}"/></div>
+                    <div class="stat-mod"><label>SOC</label><input type="number" name="system.stats.soc" value="{{system.stats.soc}}"/></div>
+                    <div class="stat-mod"><label>SUR</label><input type="number" name="system.stats.sur" value="{{system.stats.sur}}"/></div>
+                    <div class="stat-mod"><label>TIR</label><input type="number" name="system.stats.tir" value="{{system.stats.tir}}"/></div>
+                    <div class="stat-mod"><label>VOL</label><input type="number" name="system.stats.vol" value="{{system.stats.vol}}"/></div>
+                </div>
+                {{/if}}
+
+                {{#if isArchetype}}
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Vices & Vertus</label>
+                    <textarea name="system.vices_vertus" rows="2" placeholder="Ex: Orgueilleux +1...">{{system.vices_vertus}}</textarea>
+                </div>
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Talents accessibles</label>
+                    <textarea name="system.talents" rows="2" placeholder="Ex: Confiance en soi, Résilience...">{{system.talents}}</textarea>
+                </div>
+                
+                <h3 style="margin-top: 15px; border-bottom: 1px solid #ccc;" title="Un Archétype donne +10 au total. Le Combat compte double !">Modificateurs de Compétences</h3>
+                <div class="stats-modifiers-grid">
+                    <div class="stat-mod" title="Attention, compte double pour l'équilibrage !"><label style="color: #5b1a1a;">COM</label><input type="number" name="system.stats.com" value="{{system.stats.com}}"/></div>
+                    <div class="stat-mod"><label>CNS</label><input type="number" name="system.stats.cns" value="{{system.stats.cns}}"/></div>
+                    <div class="stat-mod"><label>DIS</label><input type="number" name="system.stats.dis" value="{{system.stats.dis}}"/></div>
+                    <div class="stat-mod"><label>END</label><input type="number" name="system.stats.end" value="{{system.stats.end}}"/></div>
+                    <div class="stat-mod"><label>FOR</label><input type="number" name="system.stats.for" value="{{system.stats.for}}"/></div>
+                    <div class="stat-mod"><label>HAB</label><input type="number" name="system.stats.hab" value="{{system.stats.hab}}"/></div>
+                    <div class="stat-mod"><label>MAG</label><input type="number" name="system.stats.mag" value="{{system.stats.mag}}"/></div>
+                    <div class="stat-mod"><label>MOU</label><input type="number" name="system.stats.mou" value="{{system.stats.mou}}"/></div>
+                    <div class="stat-mod"><label>PER</label><input type="number" name="system.stats.per" value="{{system.stats.per}}"/></div>
+                    <div class="stat-mod"><label>SOC</label><input type="number" name="system.stats.soc" value="{{system.stats.soc}}"/></div>
+                    <div class="stat-mod"><label>SUR</label><input type="number" name="system.stats.sur" value="{{system.stats.sur}}"/></div>
+                    <div class="stat-mod"><label>TIR</label><input type="number" name="system.stats.tir" value="{{system.stats.tir}}"/></div>
+                    <div class="stat-mod"><label>VOL</label><input type="number" name="system.stats.vol" value="{{system.stats.vol}}"/></div>
+                </div>
+                {{/if}}
+
+                {{#if isCarriere}}
+                <div class="form-group">
+                    <label>Groupe de carrières</label>
+                    <input type="text" name="system.groupe" value="{{system.groupe}}" placeholder="Ex: Guerriers et bretteurs"/>
+                </div>
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Spécialités</label>
+                    <textarea name="system.specialites" rows="2" placeholder="Ex: Épées (+5), Bagarre (+5)...">{{system.specialites}}</textarea>
+                </div>
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Talents</label>
+                    <textarea name="system.talents" rows="2" placeholder="Ex: Coup bas, Dur à cuire...">{{system.talents}}</textarea>
+                </div>
+                <div class="form-group" style="align-items: flex-start;">
+                    <label style="margin-top: 5px;">Équipement</label>
+                    <textarea name="system.equipement" rows="3" placeholder="Ex: Épée courte, armure de cuir...">{{system.equipement}}</textarea>
+                </div>
+                
+                <h3 style="margin-top: 15px; border-bottom: 1px solid #ccc;">Profil de Progression (Max de cases)</h3>
+                <div class="stats-modifiers-grid">
+                    <div class="stat-mod"><label>COM</label><input type="number" name="system.stats.com" value="{{system.stats.com}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>CNS</label><input type="number" name="system.stats.cns" value="{{system.stats.cns}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>DIS</label><input type="number" name="system.stats.dis" value="{{system.stats.dis}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>END</label><input type="number" name="system.stats.end" value="{{system.stats.end}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>FOR</label><input type="number" name="system.stats.for" value="{{system.stats.for}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>HAB</label><input type="number" name="system.stats.hab" value="{{system.stats.hab}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>MAG</label><input type="number" name="system.stats.mag" value="{{system.stats.mag}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>MOU</label><input type="number" name="system.stats.mou" value="{{system.stats.mou}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>PER</label><input type="number" name="system.stats.per" value="{{system.stats.per}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>SOC</label><input type="number" name="system.stats.soc" value="{{system.stats.soc}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>SUR</label><input type="number" name="system.stats.sur" value="{{system.stats.sur}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>TIR</label><input type="number" name="system.stats.tir" value="{{system.stats.tir}}" min="0" max="6"/></div>
+                    <div class="stat-mod"><label>VOL</label><input type="number" name="system.stats.vol" value="{{system.stats.vol}}" min="0" max="6"/></div>
+                </div>
+                {{/if}}
+
+            </div>
+        </div>
+
+        <div class="tab description" data-group="primary" data-tab="description">
+            <div class="editor-container">
+                {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+            </div>
+        </div>
+
+    </section>
+</form>

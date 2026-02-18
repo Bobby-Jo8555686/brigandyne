@@ -1,0 +1,679 @@
+/* ==========================================
+   STYLE GLOBAL "DARK FANTASY"
+========================================== */
+.brigandyne.sheet {
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    color: #d4d4d4; /* Gris très clair au lieu du noir pour reposer les yeux */
+}
+
+/* Fond de la fenêtre (Noir / Gris très sombre) */
+.brigandyne .window-content {
+    background: #121212; /* Noir asphalte */
+    padding: 15px;
+    overflow-y: auto;
+}
+
+/* Titre principal Brigandyne */
+.brigandyne .main-title {
+    text-align: center;
+    font-family: "Georgia", serif;
+    font-size: 2em;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #8b0000; /* Rouge sang */
+    border-bottom: none;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+/* ==========================================
+   CHAMPS DE TEXTE & INPUTS
+========================================== */
+/* Supprimer les fonds moches et forcer le texte en blanc */
+.brigandyne input[type="text"],
+.brigandyne input[type="number"],
+.brigandyne select,
+.brigandyne textarea {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: none !important;
+    border-bottom: 1px solid #444 !important; 
+    border-radius: 2px !important;
+    color: #e0e0e0 !important; /* Forcer le texte en gris très clair */
+    font-family: "Palatino Linotype", serif;
+}
+
+.brigandyne input:focus,
+.brigandyne select:focus,
+/* Forcer les choix du menu déroulant à avoir un fond très sombre */
+.brigandyne select option,
+.brigandyne option {
+    background-color: #1a1a1a !important; /* Gris asphalte très sombre */
+    color: #e0e0e0 !important; /* Texte gris clair */
+}
+.brigandyne textarea:focus {
+    box-shadow: none !important;
+    outline: none !important;
+    border-bottom: 2px solid #9e0b0f !important; 
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Forcer la couleur des textes en gras pour qu'ils ressortent bien */
+.brigandyne strong, .brigandyne b {
+    color: #fff;
+}
+
+/* ==========================================
+   EN-TÊTE (IDENTITÉ)
+========================================== */
+.brigandyne .header-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.brigandyne .bio-line {
+    display: flex;
+    align-items: baseline;
+    border-bottom: 1px solid #333; 
+}
+
+.brigandyne .bio-line label {
+    font-weight: bold;
+    font-style: italic;
+    flex: 0 0 130px;
+    font-size: 1.1em;
+    color: #999;
+}
+
+.brigandyne .bio-line input {
+    flex: 1;
+    background: transparent;
+    font-size: 1.1em;
+    text-transform: uppercase;
+}
+
+/* Image du personnage */
+.sheet-header img {
+    border: 1px solid #444;
+    border-radius: 5px;
+    flex: 0 0 100px;
+    background: #000;
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.2); /* Léger halo rouge */
+}
+
+/* --- INITIATIVE & PROTECTION --- */
+.initiative-box {
+    margin-top: 5px;
+    background: #5e0808; /* Rouge sombre */
+    color: #e0e0e0;
+    text-align: center;
+    border-radius: 4px;
+    padding: 2px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 15px;
+    border: 1px solid #8b0000;
+}
+
+/* ==========================================
+   NAVIGATION & ONGLETS
+========================================== */
+.brigandyne .sheet-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #333;
+    margin: 10px 0;
+    padding: 0;
+}
+
+.brigandyne .sheet-tabs .item {
+    padding: 5px 15px;
+    font-family: "Signika", sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #777;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.brigandyne .sheet-tabs .item:hover {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+/* Onglet actif (Rouge sang) */
+.brigandyne .sheet-tabs .item.active {
+    background: #7a0808; /* Rouge sang */
+    color: #fff;
+    border-color: #333;
+    border-bottom: 2px solid #7a0808;
+    margin-bottom: -2px;
+    text-shadow: 1px 1px 2px #000;
+}
+
+.brigandyne .sheet-body .tab { display: none; }
+.brigandyne .sheet-body .tab.active { display: block; }
+
+/* ==========================================
+   CARACTÉRISTIQUES (La Grille)
+========================================== */
+.brigandyne .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Crée 2 colonnes de taille égale */
+    gap: 8px 30px; /* 8px d'espace vertical, 30px d'espace horizontal entre les colonnes */
+}
+.brigandyne .comp-header {
+    border-bottom: 2px solid #555;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-family: 'Georgia', serif;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    color: #999;
+}
+
+.brigandyne .stat-row {
+    align-items: center;
+    margin-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.brigandyne .stat-label {
+    font-variant: small-caps;
+    font-weight: bold;
+    font-size: 1.15em;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.brigandyne .stat-label:hover {
+    color: #9e0b0f;
+    text-shadow: 0 0 5px rgba(158, 11, 15, 0.5);
+}
+
+/* Cases de scores */
+.brigandyne .base-input,
+.brigandyne .prog-input {
+    width: 35px;
+    height: 24px;
+    border: 1px solid #444;
+    background: rgba(0,0,0,0.3);
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.brigandyne .actual-box {
+    width: 35px;
+    height: 24px;
+    border: 1px solid #555;
+    background: #222;
+    line-height: 24px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #fff !important;
+}
+
+/* ==========================================
+   CASES DE PROGRESSION VISUELLES
+========================================== */
+.brigandyne .prog-box {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Case Cochée (Rouge sang) */
+.brigandyne .prog-box.checked {
+    background-color: #8b0000;
+    box-shadow: inset 0 0 0 1px #121212; 
+    border-color: #121212;
+}
+
+/* Case Vide */
+.brigandyne .prog-box.empty {
+    background-color: rgba(255,255,255,0.05);
+}
+.brigandyne .prog-box.empty:hover { background-color: #444; }
+
+/* Case Verrouillée */
+.brigandyne .prog-box.locked {
+    background-color: #1a1a1a;
+    border: 1px dashed #444;
+    cursor: not-allowed;
+    position: relative;
+}
+.brigandyne .prog-box.locked::after {
+    content: "×";
+    color: #444;
+    font-size: 14px;
+    line-height: 12px;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    text-align: center;
+}
+
+/* ==========================================
+   ENCADRÉS & LISTES D'ITEMS
+========================================== */
+.brigandyne .book-box {
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.02);
+    min-height: 250px;
+}
+
+.brigandyne .book-box .item-header {
+    border-bottom: 1px solid #444;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.brigandyne .item-list .item {
+    padding: 5px 0;
+    border-bottom: 1px dashed #333;
+    align-items: center;
+}
+
+/* Icônes des Objets */
+.brigandyne .item-list .item img {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #000;
+    margin-right: 12px;
+    transition: all 0.2s ease;
+}
+
+.brigandyne .item-list .item img.item-rollable:hover {
+    cursor: pointer;
+    border-color: #9e0b0f;
+    box-shadow: 0 0 6px rgba(158, 11, 15, 0.6);
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   ÉDITEUR DE TEXTE (Biographie)
+========================================== */
+.brigandyne .editor-container {
+    min-height: 150px;
+    border: 1px solid #444;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    border-radius: 3px;
+    color: #d4d4d4;
+}
+
+/* ==========================================
+   JETS DE DÉS DANS LE CHAT
+========================================== */
+.brigandyne-roll {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+}
+
+.brigandyne-roll h3 {
+    border-bottom: 1px solid #444;
+    margin-bottom: 5px;
+    color: #eee;
+}
+
+.roll-result {
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 5px;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+/* Couleurs des résultats */
+.dice-total.crit-success, .roll-result.crit-success { color: #2ecc71; text-shadow: 0 0 5px rgba(46, 204, 113, 0.5); }
+.dice-total.major-success, .roll-result.major-success { color: #27ae60; }
+.dice-total.success, .roll-result.success { color: #85c1e9; }
+
+.dice-total.fail, .roll-result.fail { color: #7f8c8d; }
+.dice-total.major-fail, .roll-result.major-fail { color: #e74c3c; }
+.dice-total.crit-fail, .roll-result.crit-fail { color: #ff0000; font-weight: 900; text-shadow: 0 0 5px rgba(255,0,0,0.5); }
+
+/* ==========================================
+   SUPER-OVERRIDE MAGIQUE (FORCER LE DARK MODE)
+   Écrase les styles injectés en dur dans le HTML
+========================================== */
+.brigandyne [style*="color: #111"],
+.brigandyne [style*="color: #222"] { color: #d4d4d4 !important; }
+
+.brigandyne [style*="color: #555"],
+.brigandyne [style*="color: #444"] { color: #999 !important; }
+
+.brigandyne [style*="color: #8b0000"],
+.brigandyne [style*="color: #5b1a1a"] { color: #e74c3c !important; }
+
+.brigandyne [style*="color: #1a5b1a"] { color: #2ecc71 !important; } /* Vert plus clair pour lecture */
+.brigandyne [style*="color: #4a6491"] { color: #85c1e9 !important; } /* Bleu plus clair pour lecture */
+
+.brigandyne [style*="background: rgba(0,0,0,0.05)"],
+.brigandyne [style*="background: rgba(0,0,0,0.02)"],
+.brigandyne [style*="background: rgba(0,0,0,0.03)"] { background: rgba(255,255,255,0.03) !important; }
+
+.brigandyne [style*="background: rgba(255,255,255,0.5)"],
+.brigandyne [style*="background: rgba(255,255,255,0.3)"],
+.brigandyne [style*="background: rgba(255,255,255,0.7)"] { background: rgba(255,255,255,0.05) !important; }
+
+.brigandyne [style*="background: #fff"],
+.brigandyne [style*="background: white"] { background: #222 !important; color: #fff !important; }
+
+.brigandyne [style*="border: 1px solid #111"],
+.brigandyne [style*="border: 2px solid #111"],
+.brigandyne [style*="border-bottom: 2px solid #111"],
+.brigandyne [style*="border-bottom: 1px solid #111"],
+.brigandyne [style*="border-bottom: 1px solid #aaa"] { border-color: #444 !important; }
+
+.brigandyne [style*="border-bottom: 1px dashed #ccc"],
+.brigandyne [style*="border-top: 1px dashed #aaa"] { border-color: #333 !important; border-style: dashed !important; }
+
+.brigandyne [style*="border: 1px solid #ccc"] { border-color: #333 !important; }
+
+/* Écraser les noirs purs qui auraient survécu */
+.brigandyne [style*="color: #000"],
+.brigandyne [style*="color: #000000"],
+.brigandyne [style*="color: black"],
+.brigandyne [style*="color: #333"] { color: #d4d4d4 !important; }
+
+/* Rendre le texte de l'éditeur (Biographie) bien lisible */
+.brigandyne .editor-content { color: #e0e0e0 !important; }
+
+/* ==========================================
+   CORRECTION DES TEXTES NINJAS (Titres et Labels par défaut de Foundry)
+========================================== */
+/* Forcer tous les titres en blanc/gris très clair */
+.brigandyne h1, 
+.brigandyne h2, 
+.brigandyne h3, 
+.brigandyne h4, 
+.brigandyne h5, 
+.brigandyne h6 {
+    color: #e0e0e0 !important;
+    text-shadow: none !important;
+}
+
+/* Forcer tous les labels et textes d'inventaire en gris clair */
+.brigandyne label {
+    color: #ccc !important;
+}
+
+.brigandyne .item-list .item span,
+.brigandyne .item-list .item div {
+    color: #d4d4d4 !important;
+}
+
+/* Les petits boutons d'édition/suppression (poubelle, stylo) */
+.brigandyne .item-controls a {
+    color: #777 !important;
+}
+
+.brigandyne .item-controls a:hover {
+    color: #e74c3c !important; /* Rouge sang au survol */
+    text-shadow: 0 0 5px rgba(231, 76, 60, 0.5) !important;
+}
+
+/* ==========================================
+   GRILLE DES MODIFICATEURS (Origines, Archétypes, Carrières)
+========================================== */
+.brigandyne.item .stats-modifiers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Force l'affichage sur 4 colonnes */
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.brigandyne.item .stat-mod {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05) !important; /* Petit fond grisé élégant */
+    padding: 5px;
+    border: 1px solid #444 !important; /* Bordure sombre */
+    border-radius: 4px;
+}
+
+.brigandyne.item .stat-mod label {
+    font-size: 0.85em;
+    font-weight: bold;
+    color: #ccc !important; /* Nom de la stat en gris clair */
+    text-transform: uppercase;
+}
+
+.brigandyne.item .stat-mod input {
+    width: 100%;
+    text-align: center;
+    border: none !important;
+    background: transparent !important;
+    font-size: 1.2em;
+    color: #fff !important; /* Chiffre du modificateur en blanc pur */
+}
+
+/* ==========================================
+   INTERFACE CORE DE FOUNDRY (Menu de droite & Chat)
+========================================== */
+
+/* 1. Le fond de la barre latérale à droite */
+#sidebar {
+    background: #121212 !important; /* Noir asphalte */
+    border-left: 2px solid #333 !important;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 2. Les icônes d'onglets (Chat, Combat, Scènes...) */
+#sidebar-tabs {
+    background: #0a0a0a !important;
+    border-bottom: 2px solid #5e0808 !important; /* Ligne rouge sombre */
+}
+
+#sidebar-tabs > .item {
+    color: #777 !important;
+    transition: text-shadow 0.2s, color 0.2s;
+}
+
+#sidebar-tabs > .item:hover {
+    color: #e0e0e0 !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* L'onglet actif (allumé en rouge sang) */
+#sidebar-tabs > .item.active {
+    color: #fff !important;
+    border: 1px solid #5e0808 !important;
+    background: rgba(94, 8, 8, 0.3) !important; /* Halo rouge */
+    box-shadow: 0 0 10px #5e0808 inset !important;
+    border-radius: 3px;
+}
+
+/* 3. Le fond du journal de Chat */
+#chat-log {
+    background: #1a1a1a !important;
+}
+
+/* 4. L'apparence des messages dans le Chat */
+.chat-message {
+    background: rgba(255, 255, 255, 0.03) !important; /* Gris ultra sombre */
+    border: 1px solid #333 !important;
+    border-radius: 5px !important;
+    color: #d4d4d4 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Le nom de l'expéditeur du message (En rouge sombre) */
+.chat-message .message-sender {
+    color: #9e0b0f !important;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* 5. La zone de saisie du texte (Tout en bas) */
+#chat-form textarea {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+    border-radius: 3px !important;
+}
+
+#chat-form textarea:focus {
+    border: 1px solid #9e0b0f !important;
+    box-shadow: 0 0 5px rgba(158, 11, 15, 0.5) !important;
+}
+
+/* 6. Le style des boutons (Restreint aux fiches et au menu pour éviter les bugs Foundry) */
+.brigandyne button,
+#sidebar button,
+#chat-log button,
+#chat-form button {
+    background: rgba(0, 0, 0, 0.6) !important; /* Fond noirci pour toujours être lisible */
+    border: 1px solid #444 !important;
+    color: #d4d4d4 !important;
+    font-family: 'Georgia', serif;
+    transition: all 0.2s ease;
+}
+
+.brigandyne button:hover,
+#sidebar button:hover,
+#chat-log button:hover,
+#chat-form button:hover {
+    background: rgba(94, 8, 8, 0.6) !important; /* Rouge sombre */
+    border-color: #9e0b0f !important;
+    color: #fff !important;
+    box-shadow: 0 0 5px rgba(158, 11, 15, 0.6) !important;
+}
+
+/* ==========================================
+   CARTES DE DÉGÂTS DANS LE CHAT (DÉFINITIF & RÉTROACTIF)
+========================================== */
+.brigandyne-roll .weapon-damage {
+    padding: 8px !important;
+    border-radius: 4px !important;
+    margin-top: 8px;
+    color: #e0e0e0 !important;
+}
+
+/* 1. RÉUSSITE (Vert sombre) - Pour anciens et nouveaux jets */
+.brigandyne-roll .weapon-damage.success-box,
+.brigandyne-roll [style*="background: #e6f4ea"],
+.brigandyne-roll [style*="background:#e6f4ea"] {
+    background: #1b3a23 !important; 
+    border: 1px solid #2d5a3a !important;
+    color: #e0e0e0 !important;
+}
+
+/* 2. CRITIQUE (Or sombre) - Pour anciens et nouveaux jets */
+.brigandyne-roll .weapon-damage.crit-box,
+.brigandyne-roll [style*="background: #fff3cd"],
+.brigandyne-roll [style*="background:#fff3cd"] {
+    background: #4a3701 !important; 
+    border: 1px solid #8b6d05 !important;
+    color: #e0e0e0 !important;
+}
+
+/* 3. CONTRE-ATTAQUE SUBIE (Rouge Sang) - Pour anciens et nouveaux jets */
+.brigandyne-roll .weapon-damage.counter-attack-box,
+.brigandyne-roll [style*="background: #f8d7da"],
+.brigandyne-roll [style*="background:#f8d7da"] {
+    background: #4a0404 !important; 
+    border: 1px solid #9e0b0f !important;
+    color: #e0e0e0 !important;
+}
+
+/* On s'assure que tous les textes à l'intérieur héritent du gris clair */
+.brigandyne-roll .weapon-damage span,
+.brigandyne-roll .weapon-damage strong,
+.brigandyne-roll .weapon-damage small,
+.brigandyne-roll .weapon-damage em {
+    color: inherit !important;
+}
+.brigandyne-roll .weapon-damage small { opacity: 0.8; }
+
+/* ==========================================
+   CORRECTION DE L'ÉDITEUR DE TEXTE (Descriptions & Biographie)
+========================================== */
+
+/* 1. Forcer l'éditeur à avoir une vraie hauteur, même s'il est vide */
+.brigandyne .editor-content,
+.brigandyne .editor-content .ProseMirror {
+    min-height: 250px !important; /* Hauteur minimale garantie */
+    padding: 10px;
+}
+
+/* 2. Rendre le bouton "Éditer" (le petit stylo) immanquable */
+.brigandyne .editor-edit {
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #444 !important;
+    padding: 5px 10px !important;
+    border-radius: 3px;
+    right: 10px !important; /* On le décale un peu du bord */
+    top: 10px !important;
+    transition: all 0.2s ease;
+}
+
+.brigandyne .editor-edit:hover {
+    background: #9e0b0f !important; /* Rouge sang au survol */
+    border-color: #ff5252 !important;
+    color: #fff !important;
+    box-shadow: 0 0 8px rgba(158, 11, 15, 0.8) !important;
+}
+
+/* 3. Ajuster le fond quand on est en train d'écrire */
+.brigandyne .editor-content .ProseMirror.focused {
+    background: rgba(255, 255, 255, 0.05);
+    outline: none;
+    border-radius: 3px;
+}
+
+/* ==========================================
+   LA BOÎTE PARCHEMIN 
+========================================== */
+
+.brigandyne .editor-container,
+.brigandyne .editor {
+    background-color: #e9e0c9 !important; /* Joli fond couleur Parchemin */
+    border: 2px solid #8b6d05 !important; /* Bordure dorée sombre */
+    border-radius: 4px;
+    padding: 8px !important;
+    min-height: 200px;
+}
+
+/* On force TOUT le texte à l'intérieur (lecture ET édition) à être sombre */
+.brigandyne .editor-container *,
+.brigandyne .editor * {
+    color: #111111 !important;
+    text-shadow: none !important;
+}
+
+/* On garde le bouton d'édition (stylo) bien visible */
+.brigandyne .editor-edit {
+    background: #111 !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+    padding: 5px !important;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.brigandyne .editor-edit:hover {
+    background: #9e0b0f !important;
+}

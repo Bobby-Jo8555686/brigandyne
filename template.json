@@ -1,0 +1,182 @@
+{
+  "Actor": {
+    "types": ["personnage", "pnj"],
+    "personnage": {
+      "options": {
+        "malus_armure": false
+      },
+      "handicaps": {
+          "affaibli": false,
+          "affame": false,
+          "apeure": false,
+          "aveugle": false,
+          "confus": false,
+          "demoralise": false,
+          "ensanglante": false,
+          "essouffle": false,
+          "paralyse": false,
+          "ralenti": false,
+          "sonne": false,
+          "terrorise": false
+      },
+      "origine": "",
+      "archetype": "",
+      "carriere": "",
+      "carrieres_historiques": "",
+      "biographie": "",
+      "destin": { "value": 3, "max": 3 },
+      "experience": { "value": 0, "total": 0 },
+      "vertus": {
+        "1": { "nom": "", "valeur": "" },
+        "2": { "nom": "", "valeur": "" },
+        "3": { "nom": "", "valeur": "" },
+        "4": { "nom": "", "valeur": "" }
+      },
+      "vices": {
+        "1": { "nom": "", "valeur": "" },
+        "2": { "nom": "", "valeur": "" },
+        "3": { "nom": "", "valeur": "" },
+        "4": { "nom": "", "valeur": "" }
+      },
+      "vices_vertus": "",
+      "domaines_magiques": "",
+      "stat_magie_defaut": "mag",
+      "stats": {
+        "com": { "value": 25, "progression": 0, "label": "Combat" },
+        "cns": { "value": 25, "progression": 0, "label": "Connaissances" },
+        "dis": { "value": 25, "progression": 0, "label": "Discrétion" },
+        "end": { "value": 25, "progression": 0, "label": "Endurance" },
+        "for": { "value": 25, "progression": 0, "label": "Force" },
+        "hab": { "value": 25, "progression": 0, "label": "Habileté" },
+        "mag": { "value": 0, "progression": 0, "label": "Magie" },
+        "mou": { "value": 25, "progression": 0, "label": "Mouvement" },
+        "per": { "value": 25, "progression": 0, "label": "Perception" },
+        "soc": { "value": 25, "progression": 0, "label": "Sociabilité" },
+        "sur": { "value": 25, "progression": 0, "label": "Survie" },
+        "tir": { "value": 25, "progression": 0, "label": "Tir" },
+        "vol": { "value": 25, "progression": 0, "label": "Volonté" }
+      },
+      "vitalite": { "value": 15, "max": 15, "label": "Vitalité" },
+      "sangfroid": { "value": 15, "max": 15, "label": "Sang-froid" }
+    },
+    "pnj": {
+      "type_pnj": "standard",
+      "origine": "",
+      "archetype": "",
+      "carriere": "",
+      "description": "",
+      "stats": {
+        "com": { "value": 25, "label": "Combat" },
+        "cns": { "value": 25, "label": "Connaissances" },
+        "dis": { "value": 25, "label": "Discrétion" },
+        "end": { "value": 25, "label": "Endurance" },
+        "for": { "value": 25, "label": "Force" },
+        "hab": { "value": 25, "label": "Habileté" },
+        "mag": { "value": 0, "label": "Magie" },
+        "mou": { "value": 25, "label": "Mouvement" },
+        "per": { "value": 25, "label": "Perception" },
+        "soc": { "value": 25, "label": "Sociabilité" },
+        "sur": { "value": 25, "label": "Survie" },
+        "tir": { "value": 25, "label": "Tir" },
+        "vol": { "value": 25, "label": "Volonté" }
+      },
+      "vitalite": { "value": 10, "max": 10, "label": "Vitalité" },
+      "sangfroid": { "value": 10, "max": 10, "label": "Sang-froid" },
+      "initiative": { "value": 0, "label": "Initiative" },
+      "protection": { "value": 0, "label": "Protection" }
+    }
+  },
+  "Item": {
+    "types": ["arme", "armure", "objet", "atout", "sort", "origine", "archetype", "carriere", "domaine"],
+    
+    "origine": {
+      "description": "",
+      "special": "",
+      "talents_auto": "",
+      "limitation": "",
+      "destin": 0,
+      "bonus_sf": 0,
+      "bonus_vit": 0,
+      "stats": {
+        "com": 0, "cns": 0, "dis": 0, "end": 0, "for": 0, "hab": 0, "mag": 0,
+        "mou": 0, "per": 0, "soc": 0, "sur": 0, "tir": 0, "vol": 0
+      }
+    },
+    "archetype": {
+      "description": "",
+      "vices_vertus": "",
+      "talents": "",
+      "stats": {
+        "com": 0, "cns": 0, "dis": 0, "end": 0, "for": 0, "hab": 0, "mag": 0,
+        "mou": 0, "per": 0, "soc": 0, "sur": 0, "tir": 0, "vol": 0
+      }
+    },
+    "carriere": {
+      "description": "",
+      "groupe": "",
+      "specialites": "",
+      "talents": "",
+      "equipement": "",
+      "stats": {
+        "com": 0, "cns": 0, "dis": 0, "end": 0, "for": 0, "hab": 0, "mag": 0,
+        "mou": 0, "per": 0, "soc": 0, "sur": 0, "tir": 0, "vol": 0
+      }
+    },
+    "arme": {
+      "type_arme": "melee",
+      "utilise_force": true,
+      "degats_fixe": 0,
+      "portee": "",
+      "mains": "1",
+      "encombrement": 1,
+      "prix": "",
+      "special": ""
+    },
+    "armure": {
+      "description": "",
+      "protection": 1,
+      "equipe": false,
+      "malus_init": 0,
+      "malus_mou": 0,
+      "encombrement": 1,
+      "special": ""
+    },
+    "objet": {
+      "description": "",
+      "quantite": 1,
+      "encombrement": 1,
+      "prix": ""
+    },
+    "atout": {
+      "type_atout": "Spécialité",
+      "specialite": "",
+      "talent": "",
+      "stat_liee": "",
+      "bonus": 0,
+      "effet": ""
+    },
+    "sort": {
+      "description": "",
+      "type_sort": "sortilege",
+      "domaine": "",
+      "formule": "",
+      "difficulte": 0,
+      "portee": "Contact",
+      "duree": "",
+      "resistance": "",
+      "r_plus": "",
+      "isRituel": false
+    },
+    "magie": {
+      "uses": {
+        "tours": 0,
+        "sorts": 0,
+        "rituels": 0
+      }
+    }
+  },
+  "domaine": {
+      "description": "",
+      "spells": []
+    }
+}
