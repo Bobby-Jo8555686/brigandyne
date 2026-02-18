@@ -481,15 +481,15 @@
 }
 
 /* 2. Les icônes d'onglets (Chat, Combat, Scènes...) */
-#sidebar-tabs {
+/*#sidebar-tabs {
     background: #0a0a0a !important;
-    border-bottom: 2px solid #5e0808 !important; /* Ligne rouge sombre */
+    border-bottom: 2px solid #5e0808 !important; 
 }
 
 #sidebar-tabs > .item {
     color: #777 !important;
     transition: text-shadow 0.2s, color 0.2s;
-}
+}*/
 
 #sidebar-tabs > .item:hover {
     color: #e0e0e0 !important;
@@ -541,11 +541,11 @@
 }
 
 /* 6. Le style des boutons (Restreint aux fiches et au menu pour éviter les bugs Foundry) */
-.brigandyne button,
+/*.brigandyne button,
 #sidebar button,
 #chat-log button,
 #chat-form button {
-    background: rgba(0, 0, 0, 0.6) !important; /* Fond noirci pour toujours être lisible */
+    background: rgba(0, 0, 0, 0.6) !important; 
     border: 1px solid #444 !important;
     color: #d4d4d4 !important;
     font-family: 'Georgia', serif;
@@ -556,11 +556,11 @@
 #sidebar button:hover,
 #chat-log button:hover,
 #chat-form button:hover {
-    background: rgba(94, 8, 8, 0.6) !important; /* Rouge sombre */
+    background: rgba(94, 8, 8, 0.6) !important; 
     border-color: #9e0b0f !important;
     color: #fff !important;
     box-shadow: 0 0 5px rgba(158, 11, 15, 0.6) !important;
-}
+}*/
 
 /* ==========================================
    CARTES DE DÉGÂTS DANS LE CHAT (DÉFINITIF & RÉTROACTIF)
